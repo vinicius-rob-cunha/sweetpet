@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+
+<title th:text="${animal.nome}? ${animal.nome} : 'Novo Cadastro'"> - SweetPet - A clinica veterinaria do seu PET</title>
+
+<!--Import Google Icon Font-->
+<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+<link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}" media="screen,projection" />
+<link type="text/css" rel="stylesheet" th:href="@{/css/main.css}" media="screen,projection" />
+
+<!--Let browser know website is optimized for mobile-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body class="blue-grey darken-1">
+
+  <div class="navbar-fixed" style="margin-bottom: 1rem;">
+    <nav class="blue-grey darken-4">
+      <div class="nav-wrapper">
+        <a th:href="${(#mvc.url('HC#index')).build()}" class="brand-logo center logo">
+          <img th:src="@{/images/logo.png}" /> SweetPet
+        </a>
+      </div>
+    </nav>
+  </div>
+
+  <div class="container">
+    <div class="card sweet-card">
+      <div class="card-content">
+        <form class="form-horizontal" th:object="${animal}" th:action="${(#mvc.url('AC#salvar')).build()}" method="POST">
+          <input type="hidden" th:field="*{id}"></input>
+          <div class="card-title"> 
+            <div>
+              <i class="material-icons" style="margin-right: 1rem;">pets</i>
+              Animais
+            </div>
+            <div id="pet_name">
+              <b th:text="${animal.nome}? ${animal.nome} : Novo"></b>                
+            </div>
+            <div>
+              <button class="waves-effect waves-light btn" type="submit"> 
+                <i class="material-icons left">check</i> Salvar
+              </button>
+              <a class="waves-effect waves-light btn grey" th:href="${(#mvc.url('AC#lista')).build()}"> 
+                <i class="material-icons left">close</i> Cancelar
+              </a>
+            </div>
+          </div>
+        
+          <fieldset>
+            <div class="row">
+              <div class="input-field col s6">
+                <input type="text" id="animal_nome" th:field="*{nome}" placeholder="Nome da fera" class="validate" th:classappend="${#fields.hasErrors('nome')}? 'invalid'"></input>
+                <label for="animal_nome">Nome</label>
+              </div>
+              
+              <div class="input-field col s6">
+                <select id="tipo" th:field="*{tipo}" class="validate" th:classappend="${#fields.hasErrors('tipo')}? 'invalid'">
+                  <option th:each="tipo : ${tipos}" th:value="${tipo}"  th:text="${tipo}"></option>                  
+                  <option value="" disabled="disabled" selected="selected">Qual o tipo da fera?</option>
+                </select>
+                <label>Tipo</label>
+              </div>
+            </div>
+          </fieldset>
+        
+          <fieldset>
+            <legend><h4>Dono</h4></legend>
+          
+            <div class="row">
+              <div class="input-field col s6">
+                <i class="material-icons prefix">person</i>
+                <input type="text" id="dono_nome" th:field="*{dono.nome}" placeholder="Nome do dono" class="validate" th:classappend="${#fields.hasErrors('dono.nome')}? 'invalid'"></input>
+                <label for="dono_nome">Nome</label>
+              </div>
+              
+              <div class="input-field col s6">
+                <i class="material-icons prefix">email</i>
+                <input type="text" id="dono_email" th:field="*{dono.email}" placeholder="E-mail do dono" class="validate" th:classappend="${#fields.hasErrors('dono.email')}? 'invalid'"></input>
+                <label for="dono_email">E-mail</label>
+              </div>
+            </div>
+          
+          </fieldset>
+        
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!--Import jQuery before materialize.js-->
+  <script type="text/javascript" th:src="@{/js/jquery-3.2.1.min.js}"></script>
+  <script type="text/javascript" th:src="@{/js/materialize.min.js}"></script>
+  <script>
+  	$(document).ready(function() {
+	  $('select').material_select();
+	});
+</script>
+</body>
+</html>

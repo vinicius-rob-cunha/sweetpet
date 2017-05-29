@@ -1,0 +1,53 @@
+nav .brand-logo.logo {
+	height: 100%;
+    display: flex;
+}
+
+nav .brand-logo.logo img {
+	margin: 0 15px;
+}
+
+.nav-card {
+	transition: transform .6s ease;
+}
+
+.nav-card:hover {
+    transform: scale(1.2);
+    z-index: 999;
+}
+
+.nav-card.card-image img {
+	max-width: 100%;
+	margin: 0 auto;
+}
+
+.nav-card .card-image .card-title {
+    padding: 12px 24px;
+    right: 0;
+    background: rgba(0,0,0,.7);
+}
+
+.sweet-card .card-content .card-title {
+	display: flex;
+    justify-content: space-between;
+}
+
+.sweet-card fieldset {
+	border: 0;
+}
+
+.sweet-card legend {
+	margin-bottom: 1rem;
+}
+
+.sweet-table tbody tr {
+	cursor: pointer;
+}
+
+table a {
+	color: inherit;
+}
+
+.success_msg {
+	padding: 10px 20px;
+} 

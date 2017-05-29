@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+
+<title>Vacinas <span th:text="${animal.nome}" th:remove="tag"></span> - SweetPet - A clinica veterinaria do seu PET</title>
+
+<!--Import Google Icon Font-->
+<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+<link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}" media="screen,projection" />
+<link type="text/css" rel="stylesheet" th:href="@{/css/main.css}" media="screen,projection" />
+
+<!--Let browser know website is optimized for mobile-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body class="blue-grey darken-1">
+
+  <div class="navbar-fixed" style="margin-bottom: 1rem;">
+    <nav class="blue-grey darken-4">
+      <div class="nav-wrapper">
+        <a th:href="${(#mvc.url('HC#index')).build()}" class="brand-logo center logo">
+          <img th:src="@{/images/logo.png}" /> SweetPet
+        </a>
+      </div>
+    </nav>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col s12 left">
+        <div class="sweet-card card">
+          <div class="card-content">
+            <div class="card-title"> 
+              <div>
+                <i class="material-icons" style="margin-right: 1rem;">pets</i>
+                Vacinas - <span th:text="${animal.nome}" th:remove="tag"></span>
+              </div>
+              <a class="waves-effect waves-light btn grey" th:href="${(#mvc.url('AC#lista')).build()}"> 
+                <i class="material-icons left">close</i> Fechar
+              </a>     
+            </div>
+            <div class="row">
+              <form class="form-horizontal" th:object="${vacina}" th:action="${(#mvc.url('AC#salvarVacina').arg(0, animal.id)).build()}" method="POST">
+                <div class="input-field col s5">
+                  <input type="text" id="vacina_nome" th:field="*{nome}" placeholder="Nome da vacina a ser tomada" class="validate" th:classappend="${#fields.hasErrors('nome')}? 'invalid'"></input>
+                  <label for="vacina_nome">Nome</label>
+                </div>
+                <div class="input-field col s3">
+                  <input type="date" th:field="*{data}" class="datepicker" />
+                </div>
+                <div class="input-field col s4">
+                  <button class="waves-effect waves-light btn" type="submit"> 
+                    <i class="material-icons left">check</i> Adicionar
+                  </button>
+                </div>
+              </form>
+            </div>
+            <table class="highlight responsive-table lista-vacinas">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Data</th>
+                  <th>Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+    
+              <tbody>
+                <tr th:each="vacina : ${animal.vacinasOrdenadas}" th:attr="data-location=${(#mvc.url('AC#detalhes').arg(0, animal.id)).build()}" th:classappend="${vacina.id == vacina_alterada}? 'green lighten-2'">
+                  <td th:text="${vacina.nome}"></td>
+                  <td th:text="${{vacina.data}}"></td>
+                  <td th:text="${vacina.status}"></td>
+                  <td>
+                    <a th:if="${vacina.status == T(br.com.sweetpet.model.StatusVacina).AGENDADA}" class="btn-floating btn waves-effect waves-light" title="Clique se a vacina já foi aplicada" th:href="${(#mvc.url('AC#aplicaVacina').arg(0, animal.id).arg(1, vacina.id)).build()}">
+                      <i class="material-icons">check</i>
+                    </a>
+                  </td>
+                  <td>
+                    <a th:href="${(#mvc.url('AC#removeVacina').arg(0, animal.id).arg(1, vacina.id)).build()}">
+                      <i class="material-icons">delete</i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Import jQuery before materialize.js-->
+  <script type="text/javascript" th:src="@{/js/jquery-3.2.1.min.js}"></script>
+  <script type="text/javascript" th:src="@{/js/materialize.min.js}"></script>
+  <script>
+	$(document).ready(function() {
+		$('.datepicker').pickadate({
+			min: new Date(),
+			today: 'Hoje',
+			clear: '',
+			close: 'Fechar',
+			monthsFull: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+			monthsShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+			weekdaysFull: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+			labelMonthNext: 'Próximo mês',
+			labelMonthPrev: 'Mês Anterior',
+			format: 'dd/mm/yyyy',
+			formatSubmit: 'yyyy-mm-dd',
+			closeOnSelect: true
+	  	});
+	});
+</script>
+</body>
+</html>

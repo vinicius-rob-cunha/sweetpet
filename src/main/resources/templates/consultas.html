@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+
+<title>Consultas - SweetPet - A clinica veterinaria do seu PET</title>
+
+<!--Import Google Icon Font-->
+<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+<link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}" media="screen,projection" />
+<link type="text/css" rel="stylesheet" th:href="@{/css/main.css}" media="screen,projection" />
+
+<!--Let browser know website is optimized for mobile-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body class="blue-grey darken-1">
+
+  <div class="navbar-fixed" style="margin-bottom: 1rem;">
+    <nav class="blue-grey darken-4">
+      <div class="nav-wrapper">
+        <a th:href="${(#mvc.url('HC#index')).build()}" class="brand-logo center logo">
+          <img th:src="@{/images/logo.png}" /> SweetPet
+        </a>
+      </div>
+    </nav>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col s12 left">
+        <div class="sweet-card card">
+          <div class="card-content">
+            <div class="card-title" style="display: flex; justify-content: space-between;"> 
+              <div>
+                <i class="material-icons" style="margin-right: 1rem;">today</i>
+                Consultas
+              </div>
+              <a class="waves-effect waves-light btn" th:href="${(#mvc.url('CC#cadastro')).build()}"> 
+                <i class="material-icons left">add</i> Adicionar
+              </a>
+            </div>
+            <div th:if="${success != null}" th:text="${success}" class="green lighten-2 success_msg"></div>
+            <table class="sweet-table highlight responsive-table lista-consultas">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Veterinario</th>
+                  <th>Animal</th>
+                  <th>Valor</th>
+                </tr>
+              </thead>
+    
+              <tbody>
+                <tr th:each="consulta : ${consultas}" th:attr="data-location=${(#mvc.url('CC#detalhes').arg(0, consulta.id)).build()}">
+                  <td th:text="${{consulta.data}}"></td>
+                  <td th:text="${consulta.veterinario.nome}"></td>
+                  <td th:text="${consulta.animal.nome}"></td>
+                  <td th:text="'R$ ' + ${#numbers.formatDecimal(consulta.valor, 0, 'POINT', 2, 'COMMA')}"></td>
+                </tr>                
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Import jQuery before materialize.js-->
+  <script type="text/javascript" th:src="@{/js/jquery-3.2.1.min.js}"></script>
+  <script type="text/javascript" th:src="@{/js/materialize.min.js}"></script>
+  <script>
+	$(document).ready(function() {
+		
+		$(".lista-consultas tbody tr").click(function(){
+			var location = $(this).data("location");
+			window.location.pathname = location;
+		});
+		
+	});
+</script>
+</body>
+</html>

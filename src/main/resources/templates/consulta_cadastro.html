@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+
+<title>Consulta <span th:text="${consulta.animal}? ${consulta.animal.nome} : 'Nova'" th:remove="tag"></span> - SweetPet - A clinica veterinaria do seu PET</title>
+
+<!--Import Google Icon Font-->
+<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+<link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}" media="screen,projection" />
+<link type="text/css" rel="stylesheet" th:href="@{/css/main.css}" media="screen,projection" />
+
+<!--Let browser know website is optimized for mobile-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body class="blue-grey darken-1">
+
+  <div class="navbar-fixed" style="margin-bottom: 1rem;">
+    <nav class="blue-grey darken-4">
+      <div class="nav-wrapper">
+        <a th:href="${(#mvc.url('HC#index')).build()}" class="brand-logo center logo">
+          <img th:src="@{/images/logo.png}" /> SweetPet
+        </a>
+      </div>
+    </nav>
+  </div>
+
+  <div class="container">
+    <div class="card sweet-card">
+      <div class="card-content">
+        <form class="form-horizontal" th:object="${consulta}" th:action="${(#mvc.url('CC#salvar')).build()}" method="POST">
+          <input type="hidden" th:field="*{id}"></input>
+          <div class="card-title"> 
+            <div>
+              <i class="material-icons" style="margin-right: 1rem;">today</i>
+              Consultas
+            </div>
+            <div id="pet_name">
+              <b th:text="${consulta.animal}? ${consulta.animal.nome} : Nova"></b>                
+            </div>
+            <div>
+              <button class="waves-effect waves-light btn" type="submit"> 
+                <i class="material-icons left">check</i> Salvar
+              </button>
+              <a class="waves-effect waves-light btn grey" th:href="${(#mvc.url('CC#lista')).build()}"> 
+                <i class="material-icons left">close</i> Cancelar
+              </a>
+            </div>
+          </div>
+        
+          <fieldset>
+          
+            <div class="row">
+          
+              <div class="input-field col s6">
+                <i class="material-icons prefix">person</i>
+                <input type="text" id="veterinario_nome" th:field="*{veterinario.nome}" placeholder="Nome do veterinario" class="validate" th:classappend="${#fields.hasErrors('veterinario.nome')}? 'invalid'"></input>
+                <label for="veterinario_nome">Veterinario</label>
+              </div>
+              
+              <div class="input-field col s6">
+                <i class="material-icons prefix">pets</i>
+                <select id="animal" th:field="*{animal.id}" class="validate" th:classappend="${#fields.hasErrors('animal')}? 'invalid'">
+                  <option th:each="animal : ${animais}" th:value="${animal.id}"  th:text="${animal.nome}"></option>                  
+                </select>
+                <label for="animal">Animal</label>
+              </div>
+            
+            </div>
+            
+          </fieldset>
+        
+          <fieldset>
+            <legend><h4>Detalhes</h4></legend>
+            
+            <div class="row">
+            
+              <div class="input-field col s3">
+                <i class="material-icons prefix">today</i>
+                <input type="date" th:field="*{data}" class="datepicker" />
+                <label for="data">Data</label>
+              </div>
+              
+              <div class="input-field col s2">
+                <i class="material-icons prefix">schedule</i>
+                <input type="number" max="24" min="0" id="hora" th:field="*{hora}" placeholder="Hora" class="validate" th:classappend="${#fields.hasErrors('hora')}? 'invalid'"></input>
+                <label for="hora">Hora</label>
+              </div>
+              <div class="input-field col s2">
+                <span class="prefix">:</span>
+                <input type="number" max="59" min="0" id="minuto" th:field="*{minuto}" placeholder="Minutos" class="validate" th:classappend="${#fields.hasErrors('minuto')}? 'invalid'"></input>
+                <label for="minuto">Minuto</label>
+              </div>
+              
+              <div class="input-field col s5">
+                <i class="material-icons prefix">attach_money</i>
+                <input type="number" step=".01" min="0" id="valor" th:field="*{valor}" placeholder="Valor da consulta" class="validate" th:classappend="${#fields.hasErrors('valor')}? 'invalid'"></input>
+                <label for="valor">Valor</label>
+              </div>
+            
+            </div>
+            
+            <div class="row">
+              <div class="input-field col s12">
+                <i class="material-icons prefix">receipt</i>
+                <textarea id="detalhes" th:field="*{detalhes}" placeholder="Descreva os detalhes da consulta" class="materialize-textarea validate" th:classappend="${#fields.hasErrors('detalhes')}? 'invalid'"></textarea>
+                <label for="detalhes">Detalhes</label>
+              </div>
+            </div>
+          
+          </fieldset>
+        
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!--Import jQuery before materialize.js-->
+  <script type="text/javascript" th:src="@{/js/jquery-3.2.1.min.js}"></script>
+  <script type="text/javascript" th:src="@{/js/materialize.min.js}"></script>
+  <script>
+  	$(document).ready(function() {
+  		$('select').material_select();
+  		
+  		$('.datepicker').pickadate({
+			min: new Date(),
+			today: 'Hoje',
+			clear: '',
+			close: 'Fechar',
+			monthsFull: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+			monthsShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+			weekdaysFull: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+			labelMonthNext: 'Próximo mês',
+			labelMonthPrev: 'Mês Anterior',
+			format: 'dd/mm/yyyy',
+			formatSubmit: 'yyyy-mm-dd',
+			closeOnSelect: true
+	  	});
+	});
+</script>
+</body>
+</html>
